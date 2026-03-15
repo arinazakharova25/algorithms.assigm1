@@ -1,7 +1,7 @@
 namespace MystackClass;
 public class MyStack
 {
-    private const int Capacity = 50;
+    private const int Capacity = 100;
 
     private string[] _array = new string[Capacity];
 
@@ -9,7 +9,6 @@ public class MyStack
 
     public void Push(string value)
     {
-
         _array[_pointer] = value;
         _pointer++;
     }
@@ -21,8 +20,22 @@ public class MyStack
             return null;
         }
 
-        var value = _array[_pointer];
         _pointer--;
-        return value;
+        return _array[_pointer];
+    }
+
+    public string Peek()
+    {
+        if (_pointer == 0)
+        {
+            return null;
+        }
+
+        return _array[_pointer - 1];
+    }
+
+    public bool IsEmpty()
+    {
+        return _pointer == 0;
     }
 }
