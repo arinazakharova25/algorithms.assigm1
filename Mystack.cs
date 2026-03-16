@@ -9,7 +9,7 @@ public class MyStack
     {
         if (pointer >= Capacity)
         {
-            throw new Exception ("Stack is overflow")
+            throw new Exception ("Stack is full")
         }
         array[pointer] = value;
         pointer++;

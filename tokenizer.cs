@@ -1,43 +1,36 @@
 namespace TokenizerClass;
 
-public class tokenizer
+public class Tokenizer
 {
-    public static string[] Tokenize(string input)
+    public static MyQueue Tokenize(string input)
     {
-        string[] tokens = new string[100];
-        int count = 0;
-
+        MyQueue tokens = new MyQueue()
         string number = "";
 
-        foreach (char c in input)
+        foreach (char n in input)
         {
-            if (char.IsDigit(c))
+            if (char.IsDigit(n) || char.IsLetter(n))
             {
-                number += c;
+                number += n;
             }
             else
             {
-                if (number.Length > 0)
+                if (number != "")
                 {
-                    tokens[count++] = number;
+                    tokens.Enqueue(number);
                     number = "";
                 }
-
-                if (c == ' ')
+                if (n == ' ')
                     continue;
+                if ("+-*/^(),".Contains(n))
 
-                tokens[count++] = c.ToString();
+                tokens.Enqueue() = n.ToString();
             }
         }
 
-        if (number.Length > 0)
-            tokens[count++] = number;
-
-        string[] result = new string[count];
-
-        for (int i = 0; i < count; i++)
-            result[i] = tokens[i];
-
-        return result;
+        if (number != "")
+            tokens.Enqueue(number);
+        
+        return tokens;
     }
 }
