@@ -1,50 +1,60 @@
 namespace MyCalculator;
-public class RpnCalculator
+
+public class Calculator
 {
     private static bool IsOperator(string t)
     {
         return t == "+" || t == "-" || t == "*" || t == "/" || t == "^";
     }
 
-    public static double Evaluate(string[] rpn)
+    public static double Evaluate(MyQueue rpnTokens)
     {
-        MyStack<double> stack = new MyStack<double>();
+        MyStack values = new MyStack();
 
-        foreach (string token in rpn)
+        while (rpnTokens.Count > 0)
         {
-            if (double.TryParse(token, out double number))
+            string token = rpnTokens.Dequeue();
+
+            if (double.TryParse(token, out _))
             {
-                stack.Push(number);
+                values.Push(token);
             }
             else if (IsOperator(token))
             {
-                double b = stack.Pop();
-                double a = stack.Pop();
+                double b = double.Parse(values.Pull());
+                double a = double.Parse(values.Pull());
+                double result = 0;
+                
+                if (token == "+") result = a + b;
+                else if (token == "-") result = a - b;
+                else if (token == "*") result = a * b;
+                else if (token == "/")
+                {
+                    if (b == 0) throw new Exception("Cannot divide by zero");
+                    result = a / b;
+                }
+                else if (token == "^") result = Math.Pow(a, b);
+                else throw new Exception($"Unknown operator: {token}");
 
-                if (token == "+") stack.Push(a + b);
-                if (token == "-") stack.Push(a - b);
-                if (token == "*") stack.Push(a * b);
-                if (token == "/") stack.Push(a / b);
-                if (token == "^") stack.Push(Math.Pow(a, b));
+                values.Push(result.ToString());
             }
-            else if (token == "sin")
-            {
-                double a = stack.Pop();
-                stack.Push(Math.Sin(a));
-            }
-            else if (token == "cos")
-            {
-                double a = stack.Pop();
-                stack.Push(Math.Cos(a));
+            else if (token == "sin") 
+            { 
+                double a = double.Parse(values.Pull()); 
+                values.Push(Math.Sin(a).ToString()); 
+            } 
+            else if (token == "cos") 
+            { 
+                double a = double.Parse(values.Pull()); 
+                values.Push(Math.Cos(a).ToString()); 
             }
             else if (token == "max")
             {
-                double b = stack.Pop();
-                double a = stack.Pop();
-                stack.Push(Math.Max(a, b));
+                double b = double.Parse(values.Pull());
+                double a = double.Parse(values.Pull());
+                values.Push(Math.Max(a, b).ToString());
             }
         }
-
-        return stack.Pop();
+        return double.Parse(values.Pull());
     }
 }
