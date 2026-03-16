@@ -4,7 +4,7 @@ public class Tokenizer
 {
     public static MyQueue Tokenize(string input)
     {
-        MyQueue tokens = new MyQueue()
+        MyQueue tokens = new MyQueue();
         string number = "";
 
         foreach (char n in input)
@@ -20,17 +20,18 @@ public class Tokenizer
                     tokens.Enqueue(number);
                     number = "";
                 }
+
                 if (n == ' ')
                     continue;
-                if ("+-*/^(),".Contains(n))
 
-                tokens.Enqueue() = n.ToString();
+                if ("+-*/^(),".Contains(n))
+                    tokens.Enqueue(n.ToString());
             }
         }
 
         if (number != "")
             tokens.Enqueue(number);
-        
+
         return tokens;
     }
 }

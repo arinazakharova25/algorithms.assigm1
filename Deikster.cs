@@ -16,18 +16,18 @@ public class ShuntingYard
         return 0;
     }
 
-    public static MyQueue ConvertToRpn(MyQueue InpTokens)
+    public static MyQueue ConvertToRpn(MyQueue inpTokens)
     {
         MyStack stack = new MyStack();
-        MyQueue outputQueue = new MyQueue();
-        
-        while (InpTokens.Count > 0)
+        MyQueue output = new MyQueue();
+
+        while (inpTokens.Count > 0)
         {
-            string token = InpTokens.Dequeue();
-            
+            string token = inpTokens.Dequeue();
+
             if (double.TryParse(token, out _))
             {
-                outputQueue.Enqueue(token);
+                output.Enqueue(token);
             }
             else if (token == "sin" || token == "cos" || token == "max")
             {
@@ -36,17 +36,17 @@ public class ShuntingYard
             else if (token == ",")
             {
                 while (stack.Count > 0 && stack.Peek() != "(")
-                {
-                    outputQueue.Enqueue(stack.Pull());
-                }
-                if (stack.Count == 0) throw new Exception("The coma wasnt in the right place or there was no coma");
+                    output.Enqueue(stack.Pop());
             }
             else if (IsOperator(token))
             {
-                while (stack.Count > 0 && IsOperator(stack.Peek()) && Priority(stack.Peek()) >= Priority(token))
+                while (stack.Count > 0 &&
+                       IsOperator(stack.Peek()) &&
+                       Priority(stack.Peek()) >= Priority(token))
                 {
-                    outputQueue.Enqueue(stack.Pull());
+                    output.Enqueue(stack.Pop());
                 }
+
                 stack.Push(token);
             }
             else if (token == "(")
@@ -56,31 +56,26 @@ public class ShuntingYard
             else if (token == ")")
             {
                 while (stack.Count > 0 && stack.Peek() != "(")
-                {
-                    outputQueue.Enqueue(stack.Pull());
-                }
+                    output.Enqueue(stack.Pop());
 
-                if (stack.Count == 0) throw new Exception("Помилка: невідповідність дужок (відсутня '(')");
-                
-                stack.Pull();
-                
-                if (stack.Count > 0 && (stack.Peek() == "sin" || stack.Peek() == "cos" || stack.Peek() == "max"))
+                if (stack.Count == 0)
+                    throw new Exception("Bracket mismatch");
+
+                stack.Pop();
+
+                if (stack.Count > 0 &&
+                    (stack.Peek() == "sin" ||
+                     stack.Peek() == "cos" ||
+                     stack.Peek() == "max"))
                 {
-                    outputQueue.Enqueue(stack.Pull());
+                    output.Enqueue(stack.Pop());
                 }
-            }
-            else
-            {
-                throw new Exception($"Невідомий токен: {token}");
             }
         }
-        
+
         while (stack.Count > 0)
-        {
-            if (stack.Peek() == "(") throw new Exception("There are to many'('");
-            outputQueue.Enqueue(stack.Pull());
-        }
+            output.Enqueue(stack.Pop());
 
-        return outputQueue;
+        return output;
     }
 }

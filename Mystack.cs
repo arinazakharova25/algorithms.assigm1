@@ -1,4 +1,5 @@
 namespace MystackClass;
+
 public class MyStack
 {
     private const int Capacity = 100;
@@ -8,15 +9,16 @@ public class MyStack
     public void Push(string value)
     {
         if (pointer >= Capacity)
-        {
-            throw new Exception ("Stack is full")
-        }
-        array[pointer] = value;
-        pointer++;
+            throw new Exception("Stack is full");
+
+        array[pointer++] = value;
     }
 
     public string Pop()
     {
+        if (pointer == 0)
+            throw new Exception("Stack is empty");
+
         pointer--;
         return array[pointer];
     }
@@ -24,8 +26,13 @@ public class MyStack
     public string Peek()
     {
         if (pointer == 0)
-        {
-            throw new Exception ("Stack is empty")
-        }    
+            throw new Exception("Stack is empty");
+
         return array[pointer - 1];
     }
+
+    public int Count
+    {
+         return array[pointer]; 
+    }
+}

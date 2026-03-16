@@ -1,26 +1,36 @@
 namespace programCS;
 
+using MyCalculator;
+
 class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
-        Console.WriteLine("Enter expression:");
+        string input;
+        if (args.Length > 0)
+        {
+            input = string.Join("", args);
+        }
+        else
+        {
+            Console.WriteLine("Enter expression:");
+            input = Console.ReadLine();
+        }
+        if (string.IsNullOrWhiteSpace(input)) return;
 
-        string input = Console.ReadLine();
+        try
+        {
+           
+            MyQueue tokens = Tokenizer.Tokenize(input);
+            MyQueue rpn = ShuntingYard.ConvertToRpn(tokens);
+            
+            double result = Calculator.Evaluate(rpn);
 
-        string[] tokens = Tokenizer.Tokenize(input);
-
-        string[] rpn = ShuntingYard.Convert(tokens);
-
-        Console.WriteLine("RPN:");
-
-        foreach (string t in rpn)
-            Console.Write(t + " ");
-
-        Console.WriteLine();
-
-        double result = Calculator.Calculate(rpn);
-
-        Console.WriteLine("Result: " + result);
+            Console.WriteLine("Result: " + result);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+        }
     }
 }

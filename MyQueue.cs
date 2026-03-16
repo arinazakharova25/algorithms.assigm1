@@ -9,33 +9,28 @@ public class MyQueue
     public void Enqueue(string item)
     {
         if (count >= Capacity)
-        {
             throw new Exception("Queue is full");
-        }
 
-        queue[count] = item;
-        count++;
+        queue[count++] = item;
     }
 
     public string Dequeue()
     {
-        if (count <= Capacity)
-        {
+        if (count == 0)
             throw new Exception("Queue is empty");
-        }
 
-        string item = queue[0]
+        string item = queue[0];
+
         for (int i = 1; i < count; i++)
-        {
             queue[i - 1] = queue[i];
-        }
 
         count--;
+
         return item;
     }
 
     public int Count
     {
-        return count
+        get { return count; }
     }
 }

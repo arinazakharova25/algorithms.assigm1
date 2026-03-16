@@ -21,40 +21,37 @@ public class Calculator
             }
             else if (IsOperator(token))
             {
-                double b = double.Parse(values.Pull());
-                double a = double.Parse(values.Pull());
+                double b = double.Parse(values.Pop());
+                double a = double.Parse(values.Pop());
+
                 double result = 0;
-                
+
                 if (token == "+") result = a + b;
                 else if (token == "-") result = a - b;
                 else if (token == "*") result = a * b;
-                else if (token == "/")
-                {
-                    if (b == 0) throw new Exception("Cannot divide by zero");
-                    result = a / b;
-                }
+                else if (token == "/") result = a / b;
                 else if (token == "^") result = Math.Pow(a, b);
-                else throw new Exception($"Unknown operator: {token}");
 
                 values.Push(result.ToString());
             }
-            else if (token == "sin") 
-            { 
-                double a = double.Parse(values.Pull()); 
-                values.Push(Math.Sin(a).ToString()); 
-            } 
-            else if (token == "cos") 
-            { 
-                double a = double.Parse(values.Pull()); 
-                values.Push(Math.Cos(a).ToString()); 
+            else if (token == "sin")
+            {
+                double a = double.Parse(values.Pop());
+                values.Push(Math.Sin(a).ToString());
+            }
+            else if (token == "cos")
+            {
+                double a = double.Parse(values.Pop());
+                values.Push(Math.Cos(a).ToString());
             }
             else if (token == "max")
             {
-                double b = double.Parse(values.Pull());
-                double a = double.Parse(values.Pull());
+                double b = double.Parse(values.Pop());
+                double a = double.Parse(values.Pop());
                 values.Push(Math.Max(a, b).ToString());
             }
         }
-        return double.Parse(values.Pull());
+
+        return double.Parse(values.Pop());
     }
 }
