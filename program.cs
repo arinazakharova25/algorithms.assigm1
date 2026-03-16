@@ -1,16 +1,25 @@
 namespace programCS;
 
-public class Program
+class Program
 {
-    public static void Main(string[] args)
+    static void Main()
     {
-        var calculator = new Calculator();
-
         Console.WriteLine("Enter expression:");
 
-        var text = Console.ReadLine();
+        string input = Console.ReadLine();
 
-        var result = calculator.Calculate(text);
+        string[] tokens = Tokenizer.Tokenize(input);
+
+        string[] rpn = ShuntingYard.Convert(tokens);
+
+        Console.WriteLine("RPN:");
+
+        foreach (string t in rpn)
+            Console.Write(t + " ");
+
+        Console.WriteLine();
+
+        double result = Calculator.Calculate(rpn);
 
         Console.WriteLine("Result: " + result);
     }

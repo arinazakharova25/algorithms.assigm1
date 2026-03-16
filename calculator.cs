@@ -1,51 +1,50 @@
 namespace MyCalculator;
-
-public class Calculator
+public class RpnCalculator
 {
-    public int Calculate(string expression)
+    private static bool IsOperator(string t)
     {
-        var stack = new Stack();
+        return t == "+" || t == "-" || t == "*" || t == "/" || t == "^";
+    }
 
-        var tokens = expression.Split(' ');
+    public static double Evaluate(string[] rpn)
+    {
+        MyStack<double> stack = new MyStack<double>();
 
-        for (var i = 0; i < tokens.Length; i++)
+        foreach (string token in rpn)
         {
-            var t = tokens[i];
-
-            if (t == "+" || t == "-" || t == "*" || t == "/")
+            if (double.TryParse(token, out double number))
             {
-                var b = int.Parse(stack.Pull());
-                var a = int.Parse(stack.Pull());
-
-                var result = 0;
-
-                if (t == "+")
-                {
-                    result = a + b;
-                }
-
-                if (t == "-")
-                {
-                    result = a - b;
-                }
-
-                if (t == "*")
-                {
-                    result = a * b;
-                }
-
-                if (t == "/")
-                {
-                    result = a / b;
-                }
-
-                stack.Push(result.ToString());
+                stack.Push(number);
             }
-            else
+            else if (IsOperator(token))
             {
-                stack.Push(t);
+                double b = stack.Pop();
+                double a = stack.Pop();
+
+                if (token == "+") stack.Push(a + b);
+                if (token == "-") stack.Push(a - b);
+                if (token == "*") stack.Push(a * b);
+                if (token == "/") stack.Push(a / b);
+                if (token == "^") stack.Push(Math.Pow(a, b));
+            }
+            else if (token == "sin")
+            {
+                double a = stack.Pop();
+                stack.Push(Math.Sin(a));
+            }
+            else if (token == "cos")
+            {
+                double a = stack.Pop();
+                stack.Push(Math.Cos(a));
+            }
+            else if (token == "max")
+            {
+                double b = stack.Pop();
+                double a = stack.Pop();
+                stack.Push(Math.Max(a, b));
             }
         }
-        return int.Parse(stack.Pull());
+
+        return stack.Pop();
     }
 }
