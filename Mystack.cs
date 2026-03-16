@@ -7,6 +7,10 @@ public class MyStack
 
     public void Push(string value)
     {
+        if (pointer >= Capacity)
+        {
+            throw new Exception ("Stack is overflow")
+        }
         array[pointer] = value;
         pointer++;
     }
@@ -19,11 +23,9 @@ public class MyStack
 
     public string Peek()
     {
+        if (pointer == 0)
+        {
+            throw new Exception ("Stack is empty")
+        }    
         return array[pointer - 1];
     }
-
-    public bool IsEmpty()
-    {
-        return pointer == 0;
-    }
-}
